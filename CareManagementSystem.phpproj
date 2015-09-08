@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>CareManagementSystem</Name>
+    <ProjectGuid>a52895a2-4735-4d9e-98c7-463fb78e3bc1</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CareManagementSystem</RootNamespace>
+    <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
+    <AssemblyName>CareManagementSystem</AssemblyName>
+    <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+    <Server>PHPDev</Server>
+    <PublishEvent>None</PublishEvent>
+    <PHPDevAutoPort>True</PHPDevAutoPort>
+    <PHPDevPort>5060</PHPDevPort>
+    <PHPDevHostName>localhost</PHPDevHostName>
+    <IISProjectUrl>http://localhost:13031/</IISProjectUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeDebugInformation>false</IncludeDebugInformation>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="allpoints.php" />
+    <Compile Include="dbConnect.php" />
+    <Compile Include="dbsize.php" />
+    <Compile Include="postCoordinates.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bootstrap-tagsinput-angular.js" />
+    <Content Include="bootstrap-tagsinput.css" />
+    <Content Include="bootstrap-tagsinput.js" />
+    <Content Include="img\background.png" />
+    <Content Include="img\human_icon.png" />
+    <Content Include="img\ICUBE_L3.jpg" />
+    <Content Include="img\mbs_map-600x400.png" />
+    <Content Include="img\mbs_map.png" />
+    <Content Include="img\position.png" />
+    <Content Include="img\speech_bubble.png" />
+    <Content Include="img\wifi_flat_circle_icon.png" />
+    <Content Include="img\zoomIn.png" />
+    <Content Include="img\ZoomOut.png" />
+    <Content Include="index.html" />
+    <Content Include="movement.sql" />
+    <Content Include="pair.png" />
+    <Content Include="script.js" />
+    <Content Include="scripts\e-smart-zoom-jquery.js" />
+    <Content Include="scripts\e-smart-zoom-jquery.min.js" />
+    <Content Include="scripts\jquery-1.11.0.min.js" />
+    <Content Include="style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="img\" />
+    <Folder Include="scripts\" />
+  </ItemGroup>
+</Project>

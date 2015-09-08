@@ -1,0 +1,108 @@
+body {
+	width:1100px;
+	height:700px;
+}
+#mydiv {
+    position:absolute;
+	width: 1100px;
+	height:700px;
+	z-index: 1;
+}
+
+#imgContainer{
+	width: 900px;
+	height:600px;
+}
+
+#myimage {
+	width: 900px;
+	height:600px;
+	object-fit:contain;
+	object-position:0 0;
+}
+#mycanvas {
+	width: 900px;
+	height:600px;
+	object-fit:contain;
+	object-position:0 0;
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+#iconsHolder{
+	width: 900px;
+	height:600px;
+}
+#search{
+    position:absolute;
+	margin-left:10%;
+	margin-top:5%;
+}
+
+.positionMapClass area{
+	cursor: pointer;
+}
+
+.zoomButton{
+	border:0;
+	cursor: pointer;
+}
+.zoomableContainer{
+	/*background-image: url("assets/transparent.png");*/
+}
+
+#positionButtonDiv{
+	/* Fallback for web browsers that doesn't support RGBa */
+	background: rgb(58, 56, 63);
+	/* RGBa with 0.6 opacity */
+	background: rgba(58, 56, 63, 0.8);	
+	border: solid 1px #100000;
+	color:#FFFFFF;
+	padding: 8px;
+	text-align: left;
+	position:absolute;
+	right:35px;
+	top: 0px;
+}
+
+#positionButtonDiv .positionButtonSpan img{
+	float: right;
+	border:0;
+}
+
+.peopleIcon{
+	width:75px;
+	height:75px; 
+	float:left;
+}
+
+.popup{
+	width:135px;
+	height:100px;
+	position:absolute;
+	left:35px;
+	bottom:35px;
+    z-index:1000;
+}
+
+.popupBG{
+}
+
+.popupText{
+	text-align:center;
+	padding-left:10px;
+	padding-right:10px;
+	line-height: 90px;
+}
+
+.parent .popup {
+  display: none;	
+}
+
+.parent:hover .popup {
+  display: block;
+}
+
+/* Scaling effect when hover*/
+.grow { transition: all .2s ease-in-out; }
+.grow:hover { transform: scale(1.1); }
