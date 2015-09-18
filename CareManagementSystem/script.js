@@ -87,8 +87,6 @@ var intervalId = setInterval(function() {
 		}
 	});
 }, 3000);
-
-
 var intervalId = setInterval(function () {
     //call $.ajax here
     $.ajax({
