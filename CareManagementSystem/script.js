@@ -2,6 +2,8 @@ var ctx = document.getElementById("mycanvas").getContext("2d");
 var array = [];
 
 var first = [];
+var allBeacons = {};
+
 var pageYoffset = 0;
 var pageXoffset = 0;
 
@@ -53,7 +55,36 @@ setInterval(function () {
     });
 }, 1000);
 */
+//get all beacons
+$.ajax({
+    url: 'http://commandpushingtodevice.mybluemix.net/api/beacon/list',
+    type: "GET",
+    data: ({}),
+    success: function (response) {
+        //alert('all clients: ' + response);
+        var string = "";
+        // this is executed when ajax call finished well
+        var jsonData = JSON.parse(response);
+        for (var i = 0; i < jsonData.beacons.length; i++) {
+            var client = jsonData.beacons[i];
+            console.log(client.id);
+            allBeacons[client.id] = client;
+        }
+        //alert('all clients: ' + string);
+        console.log("going to set interval for all beacons "+jsonData.beacons.length);
+        for (var i in allBeacons) {
+            console.log("set interval for "+i);
+            setInterval(getClientPos(client),1000);
+        }
+    },
+    error: function (xhr, status, error) {
+        if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+    }
+});
 
+
+
+/*
 var intervalId = setInterval(function() {
     //call $.ajax here
 	$.ajax({
@@ -87,11 +118,12 @@ var intervalId = setInterval(function() {
 		}
 	});
 }, 3000);
-var smthNew = "";
-var intervalId = setInterval(function () {
+*/
+
+function getClientPos(client) {
     //call $.ajax here
     $.ajax({
-        url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId="z1i30t4p"&floorId="7cim0o6e"&beaconId="7C:EC:79:D5:AC:7C"',
+        url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId='+client.mac,
         type: "GET",
         data: ({ time: "12:00:00" }),
         success: function (response) {
@@ -99,7 +131,7 @@ var intervalId = setInterval(function () {
             var string = "";
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
-            drawOldPeople(jsonData.x, jsonData.y, "1");
+            drawOldPeople(jsonData.x, jsonData.y, client.id);
             //alert('all clients: ' + string);
         },
         error: function (xhr, status, error) {
@@ -109,7 +141,7 @@ var intervalId = setInterval(function () {
             if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
         }
     });
-}, 1000);
+};
 
 function drawAllFootPrint(mac){
 	$.post("allpoints.php",{
