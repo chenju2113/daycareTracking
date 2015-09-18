@@ -59,7 +59,21 @@ setInterval(function () {
 $.ajax({
     url: 'http://commandpushingtodevice.mybluemix.net/api/beacon/list',
     type: "GET",
-    data: ({}),
+    contentType: 'text/plain',
+    xhrFields: {
+        // The 'xhrFields' property sets additional fields on the XMLHttpRequest.
+        // This can be used to set the 'withCredentials' property.
+        // Set the value to 'true' if you'd like to pass cookies to the server.
+        // If this is enabled, your server must respond with the header
+        // 'Access-Control-Allow-Credentials: true'.
+        withCredentials: false
+    },
+
+    headers: {
+        // Set any custom headers here.
+        // If you set any non-simple headers, your server must include these
+        // headers in the 'Access-Control-Allow-Headers' response header.
+    },
     success: function (response) {
         //alert('all clients: ' + response);
         var string = "";
