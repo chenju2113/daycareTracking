@@ -88,6 +88,30 @@ var intervalId = setInterval(function() {
 	});
 }, 3000);
 
+
+var intervalId = setInterval(function () {
+    //call $.ajax here
+    $.ajax({
+        url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId="z1i30t4p"&floorId="7cim0o6e"&beaconId="7C:EC:79:D5:AC:7C"',
+        type: "GET",
+        data: ({ time: "12:00:00" }),
+        success: function (response) {
+            //alert('all clients: ' + response);
+            var string = "";
+            // this is executed when ajax call finished well
+            var jsonData = JSON.parse(response);
+            drawOldPeople(jsonData.x, jsonData.y, "1");
+            //alert('all clients: ' + string);
+        },
+        error: function (xhr, status, error) {
+            clearInterval(intervalId);
+            alert('error: ' + error + " status " + status);
+            // executed if something went wrong during call
+            if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+        }
+    });
+}, 1000);
+
 function drawAllFootPrint(mac){
 	$.post("allpoints.php",{
 		mac:mac
