@@ -42,7 +42,7 @@ $.ajax({
         console.log("going to set interval for all beacons " + jsonData.beacons.length);
         for (var i in allBeacons) {
             console.log("set interval for " + i);
-            startGetClientPos(allBeacons[i], 1000);
+            startGetClientPos(allBeacons[i], 4000);
         }
     },
     error: function(xhr, status, error) {
@@ -206,7 +206,7 @@ function startGetClientPos(client, duration) {
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
             drawOldPeople(jsonData.x, jsonData.y, client.id, jsonData.dangerLevel);
-            setTimeout(startGetClientPos(client, duration), duration);
+            //setTimeout(startGetClientPos(client, duration), duration);
             //alert('all clients: ' + string);
         },
         error: function(xhr, status, error) {
@@ -214,7 +214,7 @@ function startGetClientPos(client, duration) {
             alert('error: ' + error + " status " + status);
             // executed if something went wrong during call
             if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-            setTimeout(startGetClientPos(client, duration), duration);
+            //setTimeout(startGetClientPos(client, duration), duration);
         }
     });
 };
@@ -285,6 +285,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         for (var i = 0; i < clientDiv.childNodes.length; i++) {
             var child = clientDiv.childNodes[i];
             if (child.id == "peopleIconOverlay") {
+                console.log(" color "+color);
                 child.style.backgroundColor = color;
             }
         }
@@ -310,6 +311,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
         iconOverlay.className = "peopleIconOverlay ";
+        console.log(" color " + color);
         iconOverlay.style.backgroundColor = color;
         myDiv.appendChild(iconOverlay);
 
