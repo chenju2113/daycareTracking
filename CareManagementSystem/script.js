@@ -16,8 +16,8 @@ var selected = false;
 
 var imgWidth = document.getElementById("myimage").width;
 var imgHeight = document.getElementById("myimage").height;
-var actualWidth;
-var actualHeight;
+var actualWidth = imgWidth;
+var actualHeight = imgHeight;
 
 //drawFootPrint(120,250,90);
 
@@ -115,11 +115,12 @@ $.ajax({
                             */
                             actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
                             actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
+                            getSensors(floorSelect.options[floorSelect.selectedIndex].value);
                         }
                     });
                 }
             }
-            getSensors(floorSelect.options[floorSelect.selectedIndex].value);
+            
         });
     },
     error: function(xhr, status, error) {
@@ -234,13 +235,15 @@ function drawAPs(x, y, name) {
     }
     image.src = "img/wifi_flat_circle_icon.png";
     */
-    console.log("draw sensors actual x" + x + " actual y"+y);
+   
     var apDiv = document.getElementById(name + "_ap");
     if (apDiv) {
+        console.log("draw new sensors actual x" + x + " actual y" + y);
         apDiv.style.top = y + "px";
         apDiv.style.left = x + "px";
 
     } else {
+        console.log("draw new sensors actual x" + x + " actual y" + y);
         var myDiv = document.createElement('div');
         myDiv.className = "parent grow";
         myDiv.style.position = "absolute";
@@ -313,7 +316,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         iconOverlay.id = "peopleIconOverlay";
         iconOverlay.className = "peopleIconOverlay ";
         console.log(" color " + color);
-        iconOverlay.style.backgroundColor = color;
+        iconOverlay.style.backgroundColor = "#00FF000";
         myDiv.appendChild(iconOverlay);
 
         // popup and text
