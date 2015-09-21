@@ -1,4 +1,5 @@
-var ctx = document.getElementById("mycanvas").getContext("2d");
+var canvas = document.getElementById('mycanvas');
+var ctx = canvas.getContext("2d");
 var floorSelect = document.getElementById("floor_select");
 
 var array = [];
@@ -17,19 +18,6 @@ var width;
 var height;
 
 //drawFootPrint(120,250,90);
-$("#macaddress").keyup(function(event){
-    if(event.keyCode == 13){
-        $("#go").click();
-    }
-});
-$("#go").click(function(){
-	var mac = $.trim($("#macaddress").val());
-	if ((mac.length!=0)&&(mac.length!=17)){
-		return;
-	}
-	ctx.clearRect(0, 0, width, height);
-	drawAllFootPrint(mac);	
-});
 
 drawAPs(100,400);
 drawAPs(400,50);
@@ -113,7 +101,7 @@ $.ajax({
 });
 
 //get all sensors
-/*
+
 $.ajax({
     url: 'http://commandpushingtodevice.mybluemix.net/api/sensor/list?siteId=z1i30t4p&floorId=' + floorSelect.options[floorSelect.selectedIndex].value,
     type: "GET",
@@ -122,22 +110,22 @@ $.ajax({
         var string = "";
         // this is executed when ajax call finished well
         var jsonData = JSON.parse(response);
-        for (var i = 0; i < jsonData.beacons.length; i++) {
-            var client = jsonData.beacons[i];
-            allBeacons[client.id] = client;
+        //clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < jsonData.sensors.length; i++) {
+            var dongle = jsonData.sensors[i];
+            allSensors[dongle.id] = dongle;
+            console.log("drawing sensor x " + dongle.x + " y " + dongle.y);
+            drawAPs(dongle.x, dongle.y);
         }
         //alert('all clients: ' + string);
-        console.log("going to set interval for all beacons " + jsonData.beacons.length);
-        for (var i in allBeacons) {
-            console.log("set interval for " + i);
-            setInterval(getClientPos(allBeacons[i]), 1000);
-        }
+        console.log("got sensors " + jsonData.sensors.length);
     },
     error: function (xhr, status, error) {
         if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
     }
 });
-*/
+
 /*
 var intervalId = setInterval(function() {
     //call $.ajax here
