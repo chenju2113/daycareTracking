@@ -267,9 +267,9 @@ function drawOldPeople(x, y, name, dangerLvl) {
 
         // dangerLvl
     }
+}
 
-    function findRelativePixels(x, actual, imgSize) {
-        var ratio = actual / imgSize;
-        return x * ratio;
-    }
+function findRelativePixels(x, actual, imgSize) {
+    var ratio = actual / imgSize;
+    return x * ratio;
 }
