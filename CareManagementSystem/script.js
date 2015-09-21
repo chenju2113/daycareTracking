@@ -261,6 +261,21 @@ function drawOldPeople(x, y, name, dangerLvl) {
     var clientDiv = document.getElementById(name + "_client");
     x = findRelativePixels(x, actualWidth, imgWidth);
     y = findRelativePixels(y, actualHeight, imgHeight);
+
+    var color = "#FFFFFF";
+    if (dangerLvl == 1) {
+        // safe
+        color = "#00FF000";
+    }
+    else if (dangerLvl == 2) {
+        // warning
+        color = "#FFA500";
+    }
+    else if (dangerLvl == 3) {
+        // danger
+        color = "#FF0000";
+    }
+
     console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
     if (clientDiv) {
         clientDiv.style.top = y + "px";
@@ -270,7 +285,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         for (var i = 0; i < clientDiv.childNodes.length; i++) {
             var child = clientDiv.childNodes[i];
             if (child.id == "peopleIconOverlay") {
-                child.style.backgroundColor = "#00F000"; // Red - #FF0000, Green - #00F000, Blue - #00A0F0
+                child.style.backgroundColor = color;
             }
         }
     } else {
@@ -295,7 +310,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
         iconOverlay.className = "peopleIconOverlay ";
-        iconOverlay.style.backgroundColor = "#FF0000"; // Red - #FF0000, Green - #00F000, Blue - #00A0F0
+        iconOverlay.style.backgroundColor = color;
         myDiv.appendChild(iconOverlay);
 
         // popup and text
