@@ -46,7 +46,8 @@ $.ajax({
         }
     },
     error: function(xhr, status, error) {
-        if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+        // if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+        console.log("get beacons error");
     }
 });
 
@@ -115,6 +116,7 @@ $.ajax({
                             */
                             actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
                             actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
+                            console.log("actual width "+actualWidth + " actual height "+actualHeight);
                             getSensors(floorSelect.options[floorSelect.selectedIndex].value);
                         }
                     });
@@ -124,7 +126,8 @@ $.ajax({
         });
     },
     error: function(xhr, status, error) {
-        if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+        //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+        console.log("floor loading error ");
     }
 });
 
@@ -153,7 +156,8 @@ function getSensors(floorid) {
             console.log("got sensors " + jsonData.sensors.length);
         },
         error: function(xhr, status, error) {
-            if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+            //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+            console.log("load sensors error ");
         }
     });
 }
@@ -201,27 +205,44 @@ function startGetClientPos(client, duration) {
         type: "GET",
         data: ({}),
         success: function(response) {
-            console.log(" gotten client " + client.id + "data " + response);
+            //console.log(" gotten client " + client.id + "data " + response);
             //alert('all clients: ' + response);
             var string = "";
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
-            drawOldPeople(jsonData.x, jsonData.y, client.id, jsonData.dangerLevel);
-            //setTimeout(startGetClientPos(client, duration), duration);
+            var signX = generateRandom(2);
+            var signY = generateRandom(2);
+            var valX = jsonData.x;
+            var valY = jsonData.y;
+            /*
+            if (signX == 0) {
+                valX = valX - generateRandom(50);
+            } else {
+                valX = valX + generateRandom(50);
+            }
+            if (signY == 0) {
+                valY = valY - generateRandom(50);
+            } else {
+                valY = valY + generateRandom(50);
+            }
+            */
+            drawOldPeople(valX, valY, client.id, jsonData.dangerLevel);
+     
+            setTimeout(startGetClientPos(client, duration), duration);
             //alert('all clients: ' + string);
         },
         error: function(xhr, status, error) {
-            clearInterval(intervalId);
-            alert('error: ' + error + " status " + status);
+            console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
             // executed if something went wrong during call
-            if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-            //setTimeout(startGetClientPos(client, duration), duration);
+            //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+            setTimeout(startGetClientPos(client, duration), duration);
         }
     });
 };
 
 function drawAPs(x, y, name) {
     x = findRelativePixels(x, actualWidth, imgWidth);
+    y = actualHeight - y;
     y = findRelativePixels(y, actualHeight, imgHeight);
     /*
     var image = new Image();
@@ -264,6 +285,7 @@ function drawAPs(x, y, name) {
 function drawOldPeople(x, y, name, dangerLvl) {
     var clientDiv = document.getElementById(name + "_client");
     x = findRelativePixels(x, actualWidth, imgWidth);
+    y = actualHeight - y;
     y = findRelativePixels(y, actualHeight, imgHeight);
 
     var color = "#FFFFFF";
@@ -280,7 +302,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         color = "#FF0000";
     }
 
-    console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
+    //console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
     if (clientDiv) {
         clientDiv.style.top = y + "px";
         clientDiv.style.left = x + "px";
@@ -289,7 +311,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         for (var i = 0; i < clientDiv.childNodes.length; i++) {
             var child = clientDiv.childNodes[i];
             if (child.id == "peopleIconOverlay") {
-                console.log(" color "+color);
+                //console.log(" color "+color);
                 child.style.backgroundColor = color;
             }
         }
@@ -315,7 +337,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
         iconOverlay.className = "peopleIconOverlay ";
-        console.log(" color " + color);
+        //console.log(" color " + color);
         //iconOverlay.style.backgroundColor = "#00FF000";
         myDiv.appendChild(iconOverlay);
 
@@ -338,4 +360,8 @@ function drawOldPeople(x, y, name, dangerLvl) {
 function findRelativePixels(x, actual, imgSize) {
     var ratio = imgSize / actual;
     return x * ratio;
+}
+
+function generateRandom(rand) {
+    return Math.floor((Math.random() * rand));
 }
