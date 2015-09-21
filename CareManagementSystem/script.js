@@ -21,9 +21,9 @@ var actualHeight;
 
 //drawFootPrint(120,250,90);
 
-drawAPs(100, 400);
-drawAPs(400, 50);
-drawAPs(800, 350);
+drawAPs(100, 400,"1");
+drawAPs(400, 50,"2");
+drawAPs(800, 350,"3");
 
 //get all beacons
 $.ajax({
@@ -138,12 +138,15 @@ function getSensors(floorid) {
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
             //clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var apHolder = document.getElementById("apsHolder");
+            while (apHolder.firstChild) {
+                apHolder.removeChild(apHolder.firstChild);
+            }
             for (var i = 0; i < jsonData.sensors.length; i++) {
                 var dongle = jsonData.sensors[i];
                 allSensors[dongle.id] = dongle;
                 console.log("drawing sensor x " + dongle.x + " y " + dongle.y);
-                drawAPs(dongle.x, dongle.y);
+                drawAPs(dongle.x, dongle.y, dongle.id);
             }
             //alert('all clients: ' + string);
             console.log("got sensors " + jsonData.sensors.length);
@@ -216,10 +219,12 @@ function startGetClientPos(client, duration) {
     });
 };
 
-function drawAPs(x, y) {
-    var image = new Image();
+function drawAPs(x, y, name) {
     x = findRelativePixels(x, actualWidth, imgWidth);
     y = findRelativePixels(y, actualHeight, imgHeight);
+    /*
+    var image = new Image();
+
     console.log("after relative pixel for drawing ap x "+x + " y " +y);
     image.onload = function () {
         ctx.save();
@@ -228,6 +233,28 @@ function drawAPs(x, y) {
         ctx.restore();
     }
     image.src = "img/wifi_flat_circle_icon.png";
+    */
+    var apDiv = document.getElementById(name + "_ap");
+    if (apDiv) {
+        apDiv.style.top = y + "px";
+        apDiv.style.left = x + "px";
+
+    } else {
+        var myDiv = document.createElement('div');
+        myDiv.className = "parent grow";
+        myDiv.style.position = "absolute";
+        myDiv.style.top = y + "px";
+        myDiv.style.left = x + "px";
+        myDiv.id = name + "_ap";
+
+        // image
+        var image = document.createElement('img');
+        image.className = "peopleIcon ";
+        image.src = "img/wifi_flat_circle_icon.png";
+        myDiv.appendChild(image);
+
+        document.getElementById("apsHolder").appendChild(myDiv);
+    }
 }
 
 function drawOldPeople(x, y, name, dangerLvl) {
