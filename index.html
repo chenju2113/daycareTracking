@@ -38,7 +38,7 @@
 			<div id="iconsHolder"></div>
 		</div>
 		<div id="positionButtonDiv">
-			<p>Zoom : 
+			<p>Zoom :
 				<span>
 					<img id="zoomInButton" class="zoomButton" src="img/zoomIn.png" title="zoom in" alt="zoom in" />
 					<img id="zoomOutButton" class="zoomButton" src="img/zoomOut.png" title="zoom out" alt="zoom out" />
@@ -57,7 +57,7 @@
 			</p>
 		</div>
 	</div>
-	
+
 	<div id="mymodal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 
@@ -106,34 +106,34 @@
 	<script src="script.js"></script>
 	<script>
 			$(document).ready(function() {
-				
+
 				$('#imgContainer').smartZoom({'containerClass':'zoomableContainer'});
 				$('#topPositionMap,#leftPositionMap,#rightPositionMap,#bottomPositionMap').bind("click", moveButtonClickHandler);
   				$('#zoomInButton,#zoomOutButton').bind("click", zoomButtonClickHandler);
-				
+
 				function zoomButtonClickHandler(e){
 			    	var scaleToAdd = 0.8;
 					if(e.target.id == 'zoomOutButton')
 						scaleToAdd = -scaleToAdd;
 					$('#imgContainer').smartZoom('zoom', scaleToAdd);
 			    }
-			    
+
 			    function moveButtonClickHandler(e){
 			    	var pixelsToMoveOnX = 0;
 					var pixelsToMoveOnY = 0;
-			
+
 					switch(e.target.id){
 						case "leftPositionMap":
-							pixelsToMoveOnX = 50;	
+							pixelsToMoveOnX = 50;
 						break;
 						case "rightPositionMap":
 							pixelsToMoveOnX = -50;
 						break;
 						case "topPositionMap":
-							pixelsToMoveOnY = 50;	
+							pixelsToMoveOnY = 50;
 						break;
 						case "bottomPositionMap":
-							pixelsToMoveOnY = -50;	
+							pixelsToMoveOnY = -50;
 						break;
 					}
 					$('#imgContainer').smartZoom('pan', pixelsToMoveOnX, pixelsToMoveOnY);
