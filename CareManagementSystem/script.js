@@ -197,7 +197,7 @@ function startGetClientPos(client, duration) {
             var string = "";
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
-            drawOldPeople(jsonData.x, jsonData.y, client.id);
+            drawOldPeople(jsonData.x, jsonData.y, client.id, jsonData.dangerLevel);
             setTimeout(startGetClientPos(client, duration), duration);
             //alert('all clients: ' + string);
         },
@@ -263,11 +263,13 @@ function drawAPs(x, y) {
     image.src = "img/wifi_flat_circle_icon.png";
 }
 
-function drawOldPeople(x, y, name) {
+function drawOldPeople(x, y, name, dangerLvl) {
     var clientDiv = document.getElementById(name + "_client");
     if (clientDiv) {
         clientDiv.style.top = y + "px";
         clientDiv.style.left = x + "px";
+
+        // dangerLvl
     } else {
         var myDiv = document.createElement('div');
         myDiv.className = "parent grow";
@@ -294,5 +296,7 @@ function drawOldPeople(x, y, name) {
         myDiv.appendChild(popupBG);
         myDiv.appendChild(popupText);
         document.getElementById("iconsHolder").appendChild(myDiv);
+
+        // dangerLvl
     }
 }
