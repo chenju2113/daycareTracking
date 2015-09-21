@@ -38,17 +38,16 @@ function get_web_page( $url, $username, $password )
 
 
 $imgURL = $_POST['url'];
-
 // validation if device MAC & coordinates are inputed
 if(!is_null($imgURL)) {
 	$user = "38iq0v9r";
     $token = "JkEEGRV_v56W";
     $response = get_web_page($imgURL, $user, $token);
-    header('Content-Type: image/jpeg');
-    echo $response["content"] ;
+    $im = imagecreatefromstring($data);
+    $encoded = base64_encode($response["content"]);
+    echo $encoded;
 } else {
 	echo "{\"Code\":\"1\"}";
-	// json_encode("1"); //Error: " . $sql . "<br>" . mysqli_error($conn)
  	exit(1); // die("Nothing entered.");
  }
 

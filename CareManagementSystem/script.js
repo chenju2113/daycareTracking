@@ -1,62 +1,27 @@
-var ctx = document.getElementById("mycanvas").getContext("2d");
+var canvas = document.getElementById('mycanvas');
+var ctx = canvas.getContext("2d");
+var floorSelect = document.getElementById("floor_select");
+
 var array = [];
 
 var first = [];
 var allBeacons = {};
 var allFloors = {};
+var allSensors = {};
 
 var pageYoffset = 0;
 var pageXoffset = 0;
 
 var selected = false;
 
-var pic = new Image();
-pic.src="ICUBE_L3.jpg";
-var picw = pic.width;
-var pich = pic.height;
 var width;
 var height;
 
-if (picw/pich > 2){
-	width = 1000;
-	height = 1000*pich/picw;
-}
-else {
-	width = 500*picw/pich;
-	height = 500;
-}
 //drawFootPrint(120,250,90);
-$("#macaddress").keyup(function(event){
-    if(event.keyCode == 13){
-        $("#go").click();
-    }
-});
-$("#go").click(function(){
-	var mac = $.trim($("#macaddress").val());
-	if ((mac.length!=0)&&(mac.length!=17)){
-		return;
-	}
-	ctx.clearRect(0, 0, width, height);
-	drawAllFootPrint(mac);	
-});
 
 drawAPs(100,400);
 drawAPs(400,50);
 drawAPs(800,350);
-
-/*
-setInterval(function () {
-	var size = 0;
-	$.get("dbsize.php",{}).done(function(data){
-		if (data != size){
-			alert("changed.");
-			drawAllFootPrint();
-			size = data;
-		}
-    });
-}, 1000);
-*/
-
 
 //get all beacons
 $.ajax({
@@ -92,10 +57,10 @@ $.ajax({
         var string = "";
         // this is executed when ajax call finished well
         var jsonData = JSON.parse(response);
-        var select = document.getElementById("floor_select");
+      
         //dun remove the 1st item
-        while (select.options.length > 1) {
-            select.remove(1);
+        while (floorSelect.options.length > 1) {
+            floorSelect.remove(1);
         }
         for (var i = 0; i < jsonData.floors.length; i++) {
             var floor = jsonData.floors[i];
@@ -104,12 +69,12 @@ $.ajax({
             var option = document.createElement("option");
             option.text = floor.name;
             option.value = floor.floorId;
-            select.add(option, i + 1);
+            floorSelect.add(option, i + 1);
         }
-        select.addEventListener("change", function () {
+        floorSelect.addEventListener("change", function () {
             var image = document.getElementById("myimage");
             if (image) {
-                if (allFloors[select.options[select.selectedIndex].value]) {
+                if (allFloors[floorSelect.options[floorSelect.selectedIndex].value]) {
                     //image.src = allFloors[select.options[select.selectedIndex].value].imageURL;
                     $.ajax( {
 
@@ -117,33 +82,18 @@ $.ajax({
                         //url: allFloors[select.options[select.selectedIndex].value].imageURL,
                         url: "getImage.php",
                         type: "POST",
-                        data: ({ url: allFloors[select.options[select.selectedIndex].value].imageURL }),
-                        /*
-                        crossDomain: true,
-                        beforeSend: function (xhr) {
-                            var user = "38iq0v9r";
-                            var token = "JkEEGRV_v56W";
-                            // there are still other ways to do it.. i prefer crypto.js
-                            //var bytes = Crypto.charenc.Binary.stringToBytes("38iq0v9r" + ":" + "JkEEGRV_v56W");
-                            //var base64 = Crypto.util.bytesToBase64(bytes);
-                       
-                            //xhr.setRequestHeader("Authorization", "Basic " + $.base64.encode(user + ":" + token));
-                            xhr.setRequestHeader("Authorization", "Basic " + btoa(user + ":" + token));
-                        },
-                        */
+                        data: ({ url: allFloors[floorSelect.options[floorSelect.selectedIndex].value].imageURL }),
                         error : function(xhr, ajaxOptions, thrownError) {
-
                             // reset or whatever
                             console.log("error getting image");
                         },
                         success: function (img) {
-                            //console.log("received image "+img);
-                            image.src = img;
-                            
+                            image.src = "data:image/png;base64,"+img;
                        }
                     });
                 }
-             }
+            }
+            getSensors(floorSelect.options[floorSelect.selectedIndex].value);
         });
     },
     error: function (xhr, status, error) {
@@ -151,7 +101,32 @@ $.ajax({
     }
 });
 
-
+//get all sensors
+function getSensors(floorid) {
+    $.ajax({
+        url: 'http://commandpushingtodevice.mybluemix.net/api/sensor/list?siteId=z1i30t4p&floorId=' + floorid,
+        type: "GET",
+        success: function (response) {
+            //alert('all clients: ' + response);
+            var string = "";
+            // this is executed when ajax call finished well
+            var jsonData = JSON.parse(response);
+            //clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < jsonData.sensors.length; i++) {
+                var dongle = jsonData.sensors[i];
+                allSensors[dongle.id] = dongle;
+                console.log("drawing sensor x " + dongle.x + " y " + dongle.y);
+                drawAPs(dongle.x, dongle.y);
+            }
+            //alert('all clients: ' + string);
+            console.log("got sensors " + jsonData.sensors.length);
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+        }
+    });
+}
 
 /*
 var intervalId = setInterval(function() {
