@@ -92,9 +92,24 @@ $.ajax({
                         success: function(img) {
                             image.src = "data:image/png;base64," + img;
 
-                            var imageDivContainer = document.getElementById("mydiv");
-                            imageDivContainer.style.width = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width+"px";
-                            imageDivContainer.style.height = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height+"px";
+                            var widthStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width+"px";
+                            var heightStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height+"px";
+
+                            var mydivContainer = document.getElementById("mydiv");
+                            mydivContainer.style.width = widthStr;
+                            mydivContainer.style.height = heightStr;
+
+                            var imgContainerContainer = document.getElementById("imgContainer");
+                            imgContainerContainer.style.width = widthStr;
+                            imgContainerContainer.style.height = heightStr;
+
+                            var myimageContainer = document.getElementById("myimage");
+                            myimageContainer.style.width = widthStr;
+                            myimageContainer.style.height = heightStr;
+
+                            var mycanvasContainer = document.getElementById("mycanvas");
+                            mycanvasContainer.style.width = widthStr;
+                            mycanvasContainer.style.height = heightStr;
                         }
                     });
                 }
