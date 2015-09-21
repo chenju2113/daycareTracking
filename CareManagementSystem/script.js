@@ -92,7 +92,8 @@ $.ajax({
                        }
                     });
                 }
-             }
+            }
+            getSensors(floorSelect.options[floorSelect.selectedIndex].value);
         });
     },
     error: function (xhr, status, error) {
@@ -101,30 +102,31 @@ $.ajax({
 });
 
 //get all sensors
-
-$.ajax({
-    url: 'http://commandpushingtodevice.mybluemix.net/api/sensor/list?siteId=z1i30t4p&floorId=' + floorSelect.options[floorSelect.selectedIndex].value,
-    type: "GET",
-    success: function (response) {
-        //alert('all clients: ' + response);
-        var string = "";
-        // this is executed when ajax call finished well
-        var jsonData = JSON.parse(response);
-        //clear canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (var i = 0; i < jsonData.sensors.length; i++) {
-            var dongle = jsonData.sensors[i];
-            allSensors[dongle.id] = dongle;
-            console.log("drawing sensor x " + dongle.x + " y " + dongle.y);
-            drawAPs(dongle.x, dongle.y);
+function getSensors(floorid) {
+    $.ajax({
+        url: 'http://commandpushingtodevice.mybluemix.net/api/sensor/list?siteId=z1i30t4p&floorId=' + floorid,
+        type: "GET",
+        success: function (response) {
+            //alert('all clients: ' + response);
+            var string = "";
+            // this is executed when ajax call finished well
+            var jsonData = JSON.parse(response);
+            //clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < jsonData.sensors.length; i++) {
+                var dongle = jsonData.sensors[i];
+                allSensors[dongle.id] = dongle;
+                console.log("drawing sensor x " + dongle.x + " y " + dongle.y);
+                drawAPs(dongle.x, dongle.y);
+            }
+            //alert('all clients: ' + string);
+            console.log("got sensors " + jsonData.sensors.length);
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
         }
-        //alert('all clients: ' + string);
-        console.log("got sensors " + jsonData.sensors.length);
-    },
-    error: function (xhr, status, error) {
-        if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-    }
-});
+    });
+}
 
 /*
 var intervalId = setInterval(function() {
