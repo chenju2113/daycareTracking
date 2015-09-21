@@ -234,6 +234,7 @@ function drawAPs(x, y, name) {
     }
     image.src = "img/wifi_flat_circle_icon.png";
     */
+    console.log("draw sensors actual x" + x + " actual y"+y);
     var apDiv = document.getElementById(name + "_ap");
     if (apDiv) {
         apDiv.style.top = y + "px";
