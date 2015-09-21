@@ -220,6 +220,7 @@ function drawAPs(x, y) {
     var image = new Image();
     x = findRelativePixels(x, actualWidth, imgWidth);
     y = findRelativePixels(y, actualHeight, imgHeight);
+    console.log("after relative pixel for drawing ap x "+x + " y " +y);
     image.onload = function () {
         ctx.save();
         ctx.translate(x, y);
@@ -233,6 +234,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
     var clientDiv = document.getElementById(name + "_client");
     x = findRelativePixels(x, actualWidth, imgWidth);
     y = findRelativePixels(y, actualHeight, imgHeight);
+    console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
     if (clientDiv) {
         clientDiv.style.top = y + "px";
         clientDiv.style.left = x + "px";
@@ -270,6 +272,6 @@ function drawOldPeople(x, y, name, dangerLvl) {
 }
 
 function findRelativePixels(x, actual, imgSize) {
-    var ratio = actual / imgSize;
+    var ratio = imgSize / actual;
     return x * ratio;
 }
