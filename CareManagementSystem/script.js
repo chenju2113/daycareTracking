@@ -95,8 +95,6 @@ $.ajax({
                             var imageDivContainer = document.getElementById("mydiv");
                             imageDivContainer.width = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
                             imageDivContainer.height = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
-
-                            $('#mydiv').load(document.URL +  ' #mydiv');
                         }
                     });
                 }
