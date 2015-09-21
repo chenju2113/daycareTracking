@@ -291,7 +291,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
     var color = "#FFFFFF";
     if (dangerLvl == 1) {
         // safe
-        color = "#00FF000";
+        color = "#00FF00";
     }
     else if (dangerLvl == 2) {
         // warning
@@ -327,16 +327,11 @@ function drawOldPeople(x, y, name, dangerLvl) {
         var image = document.createElement('img');
         image.className = "peopleIcon ";
         image.src = "img/human_icon.png";
-        //document.getElementById("iconsHolder").appendChild(image);
-        //image.style.position = "absolute";
-        //image.style.top = x+"px";
-        //image.style.left = y+"px";
         myDiv.appendChild(image);
 
         // dangerLvl
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
-        iconOverlay.className = "peopleIconOverlay ";
         iconOverlay.setAttribute("style", overlayStyle);
         myDiv.appendChild(iconOverlay);
 
