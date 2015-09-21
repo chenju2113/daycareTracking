@@ -26,6 +26,7 @@
     <Compile Include="allpoints.php" />
     <Compile Include="dbConnect.php" />
     <Compile Include="dbsize.php" />
+    <Compile Include="getImage.php" />
     <Compile Include="postCoordinates.php" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +44,7 @@
     <Content Include="img\zoomIn.png" />
     <Content Include="img\ZoomOut.png" />
     <Content Include="index.html" />
+    <Content Include="jquery.base64.js" />
     <Content Include="movement.sql" />
     <Content Include="pair.png" />
     <Content Include="script.js" />

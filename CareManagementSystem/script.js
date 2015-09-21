@@ -75,7 +75,7 @@ $.ajax({
         console.log("going to set interval for all beacons "+jsonData.beacons.length);
         for (var i in allBeacons) {
             console.log("set interval for "+i);
-            setInterval(getClientPos(client),1000);
+            setInterval(getClientPos(allBeacons[i]), 1000);
         }
     },
     error: function (xhr, status, error) {
@@ -110,7 +110,38 @@ $.ajax({
             var image = document.getElementById("myimage");
             if (image) {
                 if (allFloors[select.options[select.selectedIndex].value]) {
-                    image.src = allFloors[select.options[select.selectedIndex].value].imageURL;
+                    //image.src = allFloors[select.options[select.selectedIndex].value].imageURL;
+                    $.ajax( {
+
+                        // target url/service
+                        //url: allFloors[select.options[select.selectedIndex].value].imageURL,
+                        url: "getImage.php",
+                        type: "POST",
+                        data: ({ url: allFloors[select.options[select.selectedIndex].value].imageURL }),
+                        /*
+                        crossDomain: true,
+                        beforeSend: function (xhr) {
+                            var user = "38iq0v9r";
+                            var token = "JkEEGRV_v56W";
+                            // there are still other ways to do it.. i prefer crypto.js
+                            //var bytes = Crypto.charenc.Binary.stringToBytes("38iq0v9r" + ":" + "JkEEGRV_v56W");
+                            //var base64 = Crypto.util.bytesToBase64(bytes);
+                       
+                            //xhr.setRequestHeader("Authorization", "Basic " + $.base64.encode(user + ":" + token));
+                            xhr.setRequestHeader("Authorization", "Basic " + btoa(user + ":" + token));
+                        },
+                        */
+                        error : function(xhr, ajaxOptions, thrownError) {
+
+                            // reset or whatever
+                            console.log("error getting image");
+                        },
+                        success: function (img) {
+                            //console.log("received image "+img);
+                            image.src = img;
+                            
+                       }
+                    });
                 }
              }
         });
@@ -165,7 +196,7 @@ function getClientPos(client) {
         type: "GET",
         data: ({}),
         success: function (response) {
-            console.log(" gotten client data "+response);
+            console.log(" gotten client " + client.id + "data " + response);
             //alert('all clients: ' + response);
             var string = "";
             // this is executed when ajax call finished well
