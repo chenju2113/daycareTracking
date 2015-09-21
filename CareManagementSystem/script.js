@@ -40,7 +40,7 @@ $.ajax({
         console.log("going to set interval for all beacons " + jsonData.beacons.length);
         for (var i in allBeacons) {
             console.log("set interval for " + i);
-            setInterval(getClientPos(allBeacons[i]), 1000);
+            startGetClientPos(allBeacons[i], 1000);
         }
     },
     error: function(xhr, status, error) {
@@ -174,7 +174,7 @@ var intervalId = setInterval(function() {
 }, 3000);
 */
 
-function getClientPos(client) {
+function getClientPos(client, duration) {
     //call $.ajax here
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId=' + client.mac,
@@ -187,6 +187,7 @@ function getClientPos(client) {
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
             drawOldPeople(jsonData.x, jsonData.y, client.id);
+            setTimeout(getClientPos(client, duration), duration);
             //alert('all clients: ' + string);
         },
         error: function(xhr, status, error) {
@@ -194,6 +195,7 @@ function getClientPos(client) {
             alert('error: ' + error + " status " + status);
             // executed if something went wrong during call
             if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+            setTimeout(getClientPos(client, duration), duration);
         }
     });
 };
