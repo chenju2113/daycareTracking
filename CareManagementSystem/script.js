@@ -170,7 +170,7 @@ var intervalId = setInterval(function() {
 }, 3000);
 */
 
-function getClientPos(client, duration) {
+function startGetClientPos(client, duration) {
     //call $.ajax here
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId=' + client.mac,
