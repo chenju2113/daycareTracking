@@ -183,7 +183,7 @@ function startGetClientPos(client, duration) {
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
             drawOldPeople(jsonData.x, jsonData.y, client.id);
-            setTimeout(getClientPos(client, duration), duration);
+            setTimeout(startGetClientPos(client, duration), duration);
             //alert('all clients: ' + string);
         },
         error: function(xhr, status, error) {
@@ -191,7 +191,7 @@ function startGetClientPos(client, duration) {
             alert('error: ' + error + " status " + status);
             // executed if something went wrong during call
             if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-            setTimeout(getClientPos(client, duration), duration);
+            setTimeout(startGetClientPos(client, duration), duration);
         }
     });
 };
