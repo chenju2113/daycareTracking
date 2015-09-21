@@ -93,8 +93,12 @@ $.ajax({
                             image.src = "data:image/png;base64," + img;
 
                             var imageDivContainer = document.getElementById("mydiv");
+                            console.log("Container: " + imageDivContainer);
+                            console.log("Size: [ " + imageDivContainer.width + " , " + imageDivContainer.height + " ]");
                             imageDivContainer.width = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
                             imageDivContainer.height = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
+                            console.log("widthFromDiv = " + allFloors[floorSelect.options[floorSelect.selectedIndex].value].width);
+                            console.log("Size Change To: [ " + imageDivContainer.width + " , " + imageDivContainer.height + " ]");
                         }
                     });
                 }
