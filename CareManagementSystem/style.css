@@ -103,6 +103,7 @@ body {
 	margin: auto;
 	position: absolute;
 	background-color: #3f3f3f;
+	border-radius: 50%;
 	opacity: 0.5;
 }
 
