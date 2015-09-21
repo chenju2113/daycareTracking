@@ -240,6 +240,12 @@ function drawOldPeople(x, y, name, dangerLvl) {
         clientDiv.style.left = x + "px";
 
         // dangerLvl
+        for (var i = 0; i < clientDiv.childNodes.length; i++) {
+            var child = clientDiv.childNodes[i];
+            if (child.id == "peopleIconOverlay") {
+                child.style.backgroundColor = "#00F000"; // Red - #FF0000, Green - #00F000, Blue - #00A0F0
+            }
+        }
     } else {
         var myDiv = document.createElement('div');
         myDiv.className = "parent grow";
@@ -247,6 +253,8 @@ function drawOldPeople(x, y, name, dangerLvl) {
         myDiv.style.top = y + "px";
         myDiv.style.left = x + "px";
         myDiv.id = name + "_client";
+
+        // image
         var image = document.createElement('img');
         image.className = "peopleIcon ";
         image.src = "img/human_icon.png";
@@ -256,6 +264,14 @@ function drawOldPeople(x, y, name, dangerLvl) {
         //image.style.left = y+"px";
         myDiv.appendChild(image);
 
+        // dangerLvl
+        var iconOverlay = document.createElement('div');
+        iconOverlay.id = "peopleIconOverlay";
+        iconOverlay.className = "peopleIconOverlay ";
+        iconOverlay.style.backgroundColor = "#FF0000"; // Red - #FF0000, Green - #00F000, Blue - #00A0F0
+        myDiv.appendChild(iconOverlay);
+
+        // popup and text
         var popupBG = document.createElement('img');
         popupBG.src = "img/speech_bubble.png";
         var popupText = document.createElement('p');
@@ -265,9 +281,8 @@ function drawOldPeople(x, y, name, dangerLvl) {
         popupText.className = "popup popupText";
         myDiv.appendChild(popupBG);
         myDiv.appendChild(popupText);
-        document.getElementById("iconsHolder").appendChild(myDiv);
 
-        // dangerLvl
+        document.getElementById("iconsHolder").appendChild(myDiv);
     }
 }
 
