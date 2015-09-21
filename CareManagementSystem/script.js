@@ -21,9 +21,9 @@ var actualHeight = imgHeight;
 
 //drawFootPrint(120,250,90);
 
-drawAPs(100, 400,"1");
-drawAPs(400, 50,"2");
-drawAPs(800, 350,"3");
+drawAPs(100, 400, "1");
+drawAPs(400, 50, "2");
+drawAPs(800, 350, "3");
 
 //get all beacons
 $.ajax({
@@ -120,7 +120,7 @@ $.ajax({
                     });
                 }
             }
-            
+
         });
     },
     error: function(xhr, status, error) {
@@ -235,7 +235,7 @@ function drawAPs(x, y, name) {
     }
     image.src = "img/wifi_flat_circle_icon.png";
     */
-   
+
     var apDiv = document.getElementById(name + "_ap");
     if (apDiv) {
         console.log("draw new sensors actual x" + x + " actual y" + y);
@@ -279,6 +279,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         // danger
         color = "#FF0000";
     }
+    var overlayStyle = "bottom: 0; left: 0; top: 0; right: 0; margin: auto; position: absolute; border-radius: 50%; opacity: 0.5; background-color: " + color + ";";
 
     console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
     if (clientDiv) {
@@ -289,8 +290,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         for (var i = 0; i < clientDiv.childNodes.length; i++) {
             var child = clientDiv.childNodes[i];
             if (child.id == "peopleIconOverlay") {
-                console.log(" color "+color);
-                child.style.backgroundColor = color;
+                child.setAttribute("style", overlayStyle);
             }
         }
     } else {
@@ -315,8 +315,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
         iconOverlay.className = "peopleIconOverlay ";
-        console.log(" color " + color);
-        //iconOverlay.style.backgroundColor = "#00FF000";
+        iconOverlay.setAttribute("style", overlayStyle);
         myDiv.appendChild(iconOverlay);
 
         // popup and text
@@ -331,7 +330,6 @@ function drawOldPeople(x, y, name, dangerLvl) {
         myDiv.appendChild(popupText);
 
         document.getElementById("iconsHolder").appendChild(myDiv);
-        iconOverlay.style.backgroundColor = color;
     }
 }
 
