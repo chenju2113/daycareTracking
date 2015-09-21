@@ -238,7 +238,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
     var color = "#FFFFFF";
     if (dangerLvl == 1) {
         // safe
-        color = "#00F000";
+        color = "#00FF000";
     }
     else if (dangerLvl == 2) {
         // warning
@@ -246,7 +246,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
     }
     else if (dangerLvl == 3) {
         // danger
-        color = "#00ff00";
+        color = "#FF0000";
     }
 
     console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
