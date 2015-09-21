@@ -311,8 +311,6 @@ function drawOldPeople(x, y, name, dangerLvl) {
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
         iconOverlay.className = "peopleIconOverlay ";
-        console.log(" color " + color);
-        iconOverlay.style.backgroundColor = color;
         myDiv.appendChild(iconOverlay);
 
         // popup and text
@@ -327,6 +325,8 @@ function drawOldPeople(x, y, name, dangerLvl) {
         myDiv.appendChild(popupText);
 
         document.getElementById("iconsHolder").appendChild(myDiv);
+
+        iconOverlay.style.backgroundColor = color;
     }
 }
 
