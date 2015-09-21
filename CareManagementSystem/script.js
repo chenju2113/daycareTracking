@@ -93,8 +93,8 @@ $.ajax({
                             image.src = "data:image/png;base64," + img;
 
                             var imageDivContainer = document.getElementById("mydiv");
-                            imageDivContainer.style.width = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
-                            imageDivContainer.style.height = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
+                            imageDivContainer.style.width = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width+"px";
+                            imageDivContainer.style.height = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height+"px";
                         }
                     });
                 }
