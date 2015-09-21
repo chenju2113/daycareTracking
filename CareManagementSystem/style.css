@@ -10,19 +10,19 @@ body {
 }
 
 #imgContainer{
-	width: 900px;
-	height:600px;
+	width: 100%;
+	height:100%;
 }
 
 #myimage {
-	width: 900px;
-	height:600px;
+	width: 100%;
+	height:100%;
 	object-fit:contain;
 	object-position:0 0;
 }
 #mycanvas {
-	width: 900px;
-	height:600px;
+	width: 100%;
+	height:100%;
 	object-fit:contain;
 	object-position:0 0;
 	position:absolute;
