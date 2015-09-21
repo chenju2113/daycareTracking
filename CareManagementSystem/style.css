@@ -95,6 +95,18 @@ body {
 	line-height: 90px;
 }
 
+.peopleIconOverlay {
+	bottom: 0;
+	left: 0;
+	top: 0;
+	right: 0;
+	margin: auto;
+	position: absolute;
+	border-radius: 50%;
+	opacity: 0.5;
+	background-color: #FFFFFF;
+}
+
 .parent .popup {
 	display: none;
 }

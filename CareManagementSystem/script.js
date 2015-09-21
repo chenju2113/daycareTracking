@@ -122,7 +122,7 @@ $.ajax({
                     });
                 }
             }
-            
+
         });
     },
     error: function(xhr, status, error) {
@@ -227,7 +227,7 @@ function startGetClientPos(client, duration) {
             }
             */
             drawOldPeople(valX, valY, client.id, jsonData.dangerLevel);
-     
+
             setTimeout(startGetClientPos(client, duration), duration);
             //alert('all clients: ' + string);
         },
@@ -256,7 +256,7 @@ function drawAPs(x, y, name) {
     }
     image.src = "img/wifi_flat_circle_icon.png";
     */
-   
+
     var apDiv = document.getElementById(name + "_ap");
     if (apDiv) {
         console.log("draw new sensors actual x" + x + " actual y" + y);
@@ -301,7 +301,6 @@ function drawOldPeople(x, y, name, dangerLvl) {
         // danger
         color = "#FF0000";
     }
-    var overlayStyle = "bottom: 0; left: 0; top: 0; right: 0; margin: auto; position: absolute; border-radius: 50%; opacity: 0.5; background-color: " + color + ";";
 
     //console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
     if (clientDiv) {
@@ -312,7 +311,7 @@ function drawOldPeople(x, y, name, dangerLvl) {
         for (var i = 0; i < clientDiv.childNodes.length; i++) {
             var child = clientDiv.childNodes[i];
             if (child.id == "peopleIconOverlay") {
-                child.setAttribute("style", overlayStyle);
+                child.style.backgroundColor = color;
             }
         }
     } else {
@@ -332,7 +331,8 @@ function drawOldPeople(x, y, name, dangerLvl) {
         // dangerLvl
         var iconOverlay = document.createElement('div');
         iconOverlay.id = "peopleIconOverlay";
-        iconOverlay.setAttribute("style", overlayStyle);
+        iconOverlay.className = "peopleIconOverlay ";
+        iconOverlay.style.backgroundColor = color;
         myDiv.appendChild(iconOverlay);
 
         // popup and text
