@@ -14,8 +14,10 @@ var pageXoffset = 0;
 
 var selected = false;
 
-var width;
-var height;
+var imgWidth = document.getElementById("myimage").width;
+var imgHeight = document.getElementById("myimage").height;
+var actualWidth;
+var actualHeight;
 
 //drawFootPrint(120,250,90);
 
@@ -91,25 +93,28 @@ $.ajax({
                         },
                         success: function(img) {
                             image.src = "data:image/png;base64," + img;
+                            /*
+                                var widthStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width+"px";
+                                var heightStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height+"px";
 
-                            var widthStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width+"px";
-                            var heightStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height+"px";
+                                var mydivContainer = document.getElementById("mydiv");
+                                mydivContainer.style.width = widthStr;
+                                mydivContainer.style.height = heightStr;
 
-                            var mydivContainer = document.getElementById("mydiv");
-                            mydivContainer.style.width = widthStr;
-                            mydivContainer.style.height = heightStr;
+                                var imgContainerContainer = document.getElementById("imgContainer");
+                                imgContainerContainer.style.width = widthStr;
+                                imgContainerContainer.style.height = heightStr;
 
-                            var imgContainerContainer = document.getElementById("imgContainer");
-                            imgContainerContainer.style.width = widthStr;
-                            imgContainerContainer.style.height = heightStr;
+                                var myimageContainer = document.getElementById("myimage");
+                                myimageContainer.style.width = widthStr;
+                                myimageContainer.style.height = heightStr;
 
-                            var myimageContainer = document.getElementById("myimage");
-                            myimageContainer.style.width = widthStr;
-                            myimageContainer.style.height = heightStr;
-
-                            var mycanvasContainer = document.getElementById("mycanvas");
-                            mycanvasContainer.style.width = widthStr;
-                            mycanvasContainer.style.height = heightStr;
+                                var mycanvasContainer = document.getElementById("mycanvas");
+                                mycanvasContainer.style.width = widthStr;
+                                mycanvasContainer.style.height = heightStr;
+                            */
+                            actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
+                            actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
                         }
                     });
                 }
@@ -211,50 +216,11 @@ function startGetClientPos(client, duration) {
     });
 };
 
-function drawAllFootPrint(mac) {
-    $.post("allpoints.php", {
-        mac: mac
-    }).done(function(data) {
-        var points = JSON.parse(data);
-        var lastone = [points[0], points[1]];
-        var angle = 90;
-        drawFootPrint(points[0], points[1], angle);
-        var thisone = [];
-        for (var i = 1; i < points.length / 2; i++) {
-            thisone = [points[i * 2], points[i * 2 + 1]];
-            var dy = -(thisone[1] - lastone[1]);
-            var dx = thisone[0] - lastone[0];
-            if (dx != 0) {
-                if (dy > 0) {
-                    angle = 180 / Math.PI * Math.atan(dy / dx);
-                } else {
-                    angle = 180 / Math.PI * Math.atan(dy / dx) + 180;
-                }
-                //alert(points+"\n"+"(thisone y - lastone y):"+thisone[1]+"-"+lastone[1]+"="+dy+"\n(thisone x - lastone x):"+thisone[0]+"-"+lastone[0]+"="+dx+"\n"+angle);
-            }
-            drawFootPrint(points[i * 2], points[i * 2 + 1], angle);
-            lastone = thisone;
-        }
-    })
-
-}
-
-function drawFootPrint(x, y, angle) {
-    var image = new Image();
-    image.onload = function() {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(angle * Math.PI / 180.0);
-        ctx.drawImage(image, 0, 0, 25, 25 * image.height / image.width);
-        ctx.restore();
-    }
-    image.src = "pair.png";
-}
-
 function drawAPs(x, y) {
     var image = new Image();
-
-    image.onload = function() {
+    x = findRelativePixels(x, actualWidth, imgWidth);
+    y = findRelativePixels(y, actualHeight, imgHeight);
+    image.onload = function () {
         ctx.save();
         ctx.translate(x, y);
         ctx.drawImage(image, 0, 0, 50, 50 * image.height / image.width);
@@ -265,6 +231,8 @@ function drawAPs(x, y) {
 
 function drawOldPeople(x, y, name, dangerLvl) {
     var clientDiv = document.getElementById(name + "_client");
+    x = findRelativePixels(x, actualWidth, imgWidth);
+    y = findRelativePixels(y, actualHeight, imgHeight);
     if (clientDiv) {
         clientDiv.style.top = y + "px";
         clientDiv.style.left = x + "px";
@@ -314,4 +282,9 @@ function drawOldPeople(x, y, name, dangerLvl) {
 
         document.getElementById("iconsHolder").appendChild(myDiv);
     }
+}
+
+function findRelativePixels(x, actual, imgSize) {
+    var ratio = actual / imgSize;
+    return x * ratio;
 }
