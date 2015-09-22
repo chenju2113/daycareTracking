@@ -18,6 +18,8 @@ var imgWidth = document.getElementById("myimage").width;
 var imgHeight = document.getElementById("myimage").height;
 var actualWidth = imgWidth;
 var actualHeight = imgHeight;
+var imgExactFitWidth = imgWidth;
+var imgExactFitHeight = imgHeight;
 
 //drawFootPrint(120,250,90);
 
@@ -76,6 +78,15 @@ $.ajax({
         }
         floorSelect.addEventListener("change", function() {
             var image = document.getElementById("myimage");
+            image.src = "";
+            //clear APs
+            var apHolder = document.getElementById("apsHolder");
+            while (apHolder.firstChild) {
+                apHolder.removeChild(apHolder.firstChild);
+            }
+
+            var imageLoader = document.getElementById("imageLoader");
+            imageLoader.style.visibility = "visible";
             if (image) {
                 if (allFloors[floorSelect.options[floorSelect.selectedIndex].value]) {
                     //image.src = allFloors[select.options[select.selectedIndex].value].imageURL;
@@ -94,6 +105,7 @@ $.ajax({
                         },
                         success: function(img) {
                             image.src = "data:image/png;base64," + img;
+                            imageLoader.style.visibility = "hidden";
                             /*
                                 var widthStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width+"px";
                                 var heightStr = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height+"px";
@@ -116,7 +128,21 @@ $.ajax({
                             */
                             actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
                             actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
-                            console.log("actual width "+actualWidth + " actual height "+actualHeight);
+                            imgExactFitWidth = Math.min(actualWidth, imgWidth);
+                            imgExactFitHeight = Math.min(actualHeight, imgHeight);
+                            var widthRatio = imgWidth / actualWidth;
+                            var heightRatio = imgHeight / actualHeight;
+
+                            if (widthRatio > heightRatio) {
+                                imgExactFitWidth = actualWidth * heightRatio;
+                                imgExactFitHeight = actualHeight * heightRatio;
+                            }else if (heightRatio > widthRatio){
+                                imgExactFitHeight = actualHeight * widthRatio;
+                                imgExactFitWidth = actualWidth * widthRatio;
+                            }
+           
+                            console.log("actual width " + actualWidth + " actual height " + actualHeight);
+                            console.log("actual imgExactFitWidth " + imgExactFitWidth + " actual imgExactFitHeight " + imgExactFitHeight);
                             getSensors(floorSelect.options[floorSelect.selectedIndex].value);
                         }
                     });
@@ -241,9 +267,9 @@ function startGetClientPos(client, duration) {
 };
 
 function drawAPs(x, y, name) {
-    x = findRelativePixels(x, actualWidth, imgWidth);
-    y = actualHeight - y;
-    y = findRelativePixels(y, actualHeight, imgHeight);
+    x = findRelativePixels(x, actualWidth, imgExactFitWidth);
+    y = findRelativePixels(y, actualHeight, imgExactFitHeight);
+    y = imgExactFitHeight - y;
     /*
     var image = new Image();
 
@@ -284,10 +310,9 @@ function drawAPs(x, y, name) {
 
 function drawOldPeople(x, y, name, dangerLvl) {
     var clientDiv = document.getElementById(name + "_client");
-    x = findRelativePixels(x, actualWidth, imgWidth);
-    y = actualHeight - y;
-    y = findRelativePixels(y, actualHeight, imgHeight);
-
+    x = findRelativePixels(x, actualWidth, imgExactFitWidth);
+    y = findRelativePixels(y, actualHeight, imgExactFitHeight);
+    y = imgExactFitHeight - y;
     var color = "#FFFFFF";
     if (dangerLvl == 1) {
         // safe

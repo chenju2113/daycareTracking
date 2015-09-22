@@ -33,6 +33,7 @@
     <Content Include="bootstrap-tagsinput-angular.js" />
     <Content Include="bootstrap-tagsinput.css" />
     <Content Include="bootstrap-tagsinput.js" />
+    <Content Include="img\ajax_loader.gif" />
     <Content Include="img\background.png" />
     <Content Include="img\human_icon.png" />
     <Content Include="img\ICUBE_L3.jpg" />
