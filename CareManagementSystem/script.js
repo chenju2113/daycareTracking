@@ -43,7 +43,7 @@ $.ajax({
         //alert('all clients: ' + string);
         console.log("going to set interval for all beacons " + jsonData.beacons.length);
         for (var i in allBeacons) {
-            console.log("set interval for " + i);
+            //console.log("set interval for " + i);
             startGetClientPos(allBeacons[i], 4000);
         }
     },
@@ -231,7 +231,7 @@ function startGetClientPos(client, duration) {
         type: "GET",
         data: ({}),
         success: function(response) {
-            //console.log(" gotten client " + client.id + "data " + response);
+            console.log(" gotten client " + client.id + "data " + response);
             //alert('all clients: ' + response);
             var string = "";
             // this is executed when ajax call finished well
@@ -254,14 +254,14 @@ function startGetClientPos(client, duration) {
             */
             drawOldPeople(valX, valY, client.id, jsonData.dangerLevel);
 
-            setTimeout(startGetClientPos(client, duration), duration);
+            setTimeout(function () { startGetClientPos(client, duration) }, duration);
             //alert('all clients: ' + string);
         },
         error: function(xhr, status, error) {
             console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
             // executed if something went wrong during call
             //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-            setTimeout(startGetClientPos(client, duration), duration);
+            setTimeout(function () { startGetClientPos(client, duration) }, duration);
         }
     });
 };
@@ -300,7 +300,7 @@ function drawAPs(x, y, name) {
 
         // image
         var image = document.createElement('img');
-        image.className = "peopleIcon ";
+        image.className = "apIcon";
         image.src = "img/wifi_flat_circle_icon.png";
         myDiv.appendChild(image);
 

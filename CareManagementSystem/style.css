@@ -32,6 +32,19 @@ body {
 #iconsHolder{
 	width: 900px;
 	height:600px;
+    z-index:3;
+    top:0px;
+	left:0px;
+    position:absolute;
+}
+
+#apsHolder{
+	width: 900px;
+	height:600px;
+    z-index:2;
+    top:0px;
+	left:0px;
+    position:absolute;
 }
 #search{
 	position:absolute;
@@ -71,18 +84,22 @@ body {
 }
 
 .peopleIcon{
-	width:75px;
-	height:75px;
+	width:40px;
+	height:40px;
 	float:left;
+}
+.apIcon{
+	width:60px;
+	height:60px;
 }
 
 .popup{
 	width:135px;
 	height:100px;
 	position:absolute;
-	left:35px;
-	bottom:35px;
-	z-index:1000;
+	left:5px;
+	bottom:10px;
+	z-index:2;
 }
 
 .popupBG{
