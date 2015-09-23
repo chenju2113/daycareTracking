@@ -28,15 +28,15 @@ var imgExactFitHeight = imgHeight;
 
 //drawFootPrint(120,250,90);
 
-drawAPs(100, 400,"1");
-drawAPs(400, 50,"2");
-drawAPs(800, 350,"3");
+drawAPs(100, 400, "1");
+drawAPs(400, 50, "2");
+drawAPs(800, 350, "3");
 
 //get all floors
 $.ajax({
     url: 'http://commandpushingtodevice.mybluemix.net/api/getData/floors?siteId=z1i30t4p',
     type: "GET",
-    success: function(response) {
+    success: function (response) {
         //alert('all clients: ' + response);
         var string = "";
         // this is executed when ajax call finished well
@@ -55,7 +55,7 @@ $.ajax({
             option.value = floor.floorId;
             floorSelect.add(option, i + 1);
         }
-        floorSelect.addEventListener("change", function() {
+        floorSelect.addEventListener("change", function () {
             var image = document.getElementById("myimage");
             image.src = "";
             //clear APs
@@ -78,11 +78,11 @@ $.ajax({
                         data: ({
                             url: allFloors[floorSelect.options[floorSelect.selectedIndex].value].imageURL
                         }),
-                        error: function(xhr, ajaxOptions, thrownError) {
+                        error: function (xhr, ajaxOptions, thrownError) {
                             // reset or whatever
                             console.log("error getting image");
                         },
-                        success: function(img) {
+                        success: function (img) {
                             image.src = "data:image/png;base64," + img;
                             imageLoader.style.visibility = "hidden";
                             /*
@@ -115,11 +115,11 @@ $.ajax({
                             if (widthRatio > heightRatio) {
                                 imgExactFitWidth = actualWidth * heightRatio;
                                 imgExactFitHeight = actualHeight * heightRatio;
-                            }else if (heightRatio > widthRatio){
+                            } else if (heightRatio > widthRatio) {
                                 imgExactFitHeight = actualHeight * widthRatio;
                                 imgExactFitWidth = actualWidth * widthRatio;
                             }
-           
+
                             console.log("actual width " + actualWidth + " actual height " + actualHeight);
                             console.log("actual imgExactFitWidth " + imgExactFitWidth + " actual imgExactFitHeight " + imgExactFitHeight);
                             getBeacons();
@@ -131,7 +131,7 @@ $.ajax({
 
         });
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
         //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
         console.log("floor loading error ");
     }
@@ -170,6 +170,15 @@ function getBeacons() {
                 } else {
                     offsetY = generateRandom(10);
                 }
+
+                /* Shang: to offset it by left half its width and higher by its height
+                actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
+                            actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
+                            imgExactFitWidth = Math.min(actualWidth, imgWidth);
+                            imgExactFitHeight = Math.min(actualHeight, imgHeight);
+                            var widthRatio = imgWidth / actualWidth;
+                            var heightRatio = imgHeight / actualHeight;*/
+
                 startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
             }
         },
@@ -185,7 +194,7 @@ function getSensors(floorid) {
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/sensor/list?siteId=z1i30t4p&floorId=' + floorid,
         type: "GET",
-        success: function(response) {
+        success: function (response) {
             //alert('all clients: ' + response);
             var string = "";
             // this is executed when ajax call finished well
@@ -204,7 +213,7 @@ function getSensors(floorid) {
             //alert('all clients: ' + string);
             console.log("got sensors " + jsonData.sensors.length);
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
             console.log("load sensors error ");
         }
@@ -256,15 +265,16 @@ function startGetClientPos(client, duration, offsetX, offsetY) {
         url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId=' + client.mac,
         type: "GET",
         data: ({}),
-        success: function(response) {
+        success: function (response) {
             console.log(" gotten client " + client.id + "data " + response);
             //alert('all clients: ' + response);
             var string = "";
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
 
-            var valX = jsonData.x + offsetX;
-            var valY = jsonData.y + offsetY;
+            // Shang: added another offset to get the UI aligned 
+            var valX = jsonData.x + offsetX - 82;
+            var valY = jsonData.y + offsetY - 163;
             /*
 
             */
@@ -273,7 +283,7 @@ function startGetClientPos(client, duration, offsetX, offsetY) {
             setTimeout(function () { startGetClientPos(client, duration, offsetX, offsetY) }, duration);
             //alert('all clients: ' + string);
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
             // executed if something went wrong during call
             //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
