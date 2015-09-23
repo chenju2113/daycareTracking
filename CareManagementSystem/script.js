@@ -170,15 +170,6 @@ function getBeacons() {
                 } else {
                     offsetY = generateRandom(10);
                 }
-
-                /* Shang: to offset it by left half its width and higher by its height
-                actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
-                            actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
-                            imgExactFitWidth = Math.min(actualWidth, imgWidth);
-                            imgExactFitHeight = Math.min(actualHeight, imgHeight);
-                            var widthRatio = imgWidth / actualWidth;
-                            var heightRatio = imgHeight / actualHeight;*/
-
                 startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
             }
         },
@@ -272,9 +263,8 @@ function startGetClientPos(client, duration, offsetX, offsetY) {
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
 
-            // Shang: added another offset to get the UI aligned 
-            var valX = jsonData.x + offsetX - 82;
-            var valY = jsonData.y + offsetY - 163;
+            var valX = jsonData.x + offsetX;
+            var valY = jsonData.y + offsetY;
             /*
 
             */
