@@ -161,14 +161,14 @@ function getBeacons() {
                 var offsetX = 0;
                 var offsetY = 0;
                 if (signX == 0) {
-                    offsetX = generateRandom(10);
+                    offsetX = -generateRandom(10);
                 } else {
                     offsetX = generateRandom(10);
                 }
                 if (signY == 0) {
-                    offsetY = valY - generateRandom(10);
+                    offsetY = -generateRandom(10);
                 } else {
-                    offsetY = valY + generateRandom(10);
+                    offsetY = generateRandom(10);
                 }
                 startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
             }
@@ -329,15 +329,16 @@ function drawOldPeople(x, y, name, dangerLvl, zone) {
     x = findRelativePixels(x, actualWidth, imgExactFitWidth);
     y = findRelativePixels(y, actualHeight, imgExactFitHeight);
     y = imgExactFitHeight - y;
-
+    /*
     if(zone & SAFE_ZONE || zone & NEAR_DOOR_ZONE){
-
+        console.log(name + " zone is in safe or near");
     }
     //offset the y
     else if (zone & DANGER_ZONE_FAR_FROM_DOOR || zone & DANGER_ZONE_FAR_FROM_DONGLES) {
+        console.log(name + " zone is in safe or near");
         y += 50;
     }
-
+    */
     var color = "#FFFFFF";
     if (dangerLvl == 1) {
         // safe
@@ -350,6 +351,7 @@ function drawOldPeople(x, y, name, dangerLvl, zone) {
     else if (dangerLvl == 3) {
         // danger
         color = "#FF0000";
+        y += 50;
     }
 
     //console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
