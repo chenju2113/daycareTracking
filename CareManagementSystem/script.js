@@ -2,6 +2,11 @@ var canvas = document.getElementById('mycanvas');
 var ctx = canvas.getContext("2d");
 var floorSelect = document.getElementById("floor_select");
 
+var SAFE_ZONE = 1;
+var NEAR_DOOR_ZONE = 2;
+var DANGER_ZONE_FAR_FROM_DOOR = 4;
+var DANGER_ZONE_FAR_FROM_DONGLES = 8;
+
 var array = [];
 
 var first = [];
@@ -44,7 +49,21 @@ $.ajax({
         console.log("going to set interval for all beacons " + jsonData.beacons.length);
         for (var i in allBeacons) {
             //console.log("set interval for " + i);
-            startGetClientPos(allBeacons[i], 4000);
+            var signX = generateRandom(2);
+            var signY = generateRandom(2);
+            var offsetX = 0;
+            var offsetY = 0;
+            if (signX == 0) {
+                offsetX = generateRandom(10);
+            } else {
+                offsetX = generateRandom(10);
+            }
+            if (signY == 0) {
+                offsetY = valY - generateRandom(10);
+            } else {
+                offsetY = valY + generateRandom(10);
+            }
+            startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
         }
     },
     error: function(xhr, status, error) {
@@ -224,7 +243,7 @@ var intervalId = setInterval(function() {
 }, 3000);
 */
 
-function startGetClientPos(client, duration) {
+function startGetClientPos(client, duration , offsetX, offsetY) {
     //call $.ajax here
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId=' + client.mac,
@@ -236,32 +255,22 @@ function startGetClientPos(client, duration) {
             var string = "";
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
-            var signX = generateRandom(2);
-            var signY = generateRandom(2);
-            var valX = jsonData.x;
-            var valY = jsonData.y;
+
+            var valX = jsonData.x + offsetX;
+            var valY = jsonData.y + offsetY;
             /*
-            if (signX == 0) {
-                valX = valX - generateRandom(50);
-            } else {
-                valX = valX + generateRandom(50);
-            }
-            if (signY == 0) {
-                valY = valY - generateRandom(50);
-            } else {
-                valY = valY + generateRandom(50);
-            }
+
             */
             drawOldPeople(valX, valY, client.id, jsonData.dangerLevel);
 
-            setTimeout(function () { startGetClientPos(client, duration) }, duration);
+            setTimeout(function () { startGetClientPos(client, duration, offsetX, offsetY) }, duration);
             //alert('all clients: ' + string);
         },
         error: function(xhr, status, error) {
             console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
             // executed if something went wrong during call
             //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-            setTimeout(function () { startGetClientPos(client, duration) }, duration);
+            setTimeout(function () { startGetClientPos(client, duration, offsetX, offsetY) }, duration);
         }
     });
 };
@@ -308,11 +317,20 @@ function drawAPs(x, y, name) {
     }
 }
 
-function drawOldPeople(x, y, name, dangerLvl) {
+function drawOldPeople(x, y, name, dangerLvl, zone) {
     var clientDiv = document.getElementById(name + "_client");
     x = findRelativePixels(x, actualWidth, imgExactFitWidth);
     y = findRelativePixels(y, actualHeight, imgExactFitHeight);
     y = imgExactFitHeight - y;
+
+    if(zone & SAFE_ZONE || zone & NEAR_DOOR_ZONE){
+
+    }
+    //offset the y
+    else if (zone & DANGER_ZONE_FAR_FROM_DOOR || zone & DANGER_ZONE_FAR_FROM_DONGLES) {
+        y += 50;
+    }
+
     var color = "#FFFFFF";
     if (dangerLvl == 1) {
         // safe
