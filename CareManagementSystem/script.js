@@ -32,46 +32,6 @@ drawAPs(100, 400,"1");
 drawAPs(400, 50,"2");
 drawAPs(800, 350,"3");
 
-//get all beacons
-$.ajax({
-    url: 'http://commandpushingtodevice.mybluemix.net/api/beacon/list',
-    type: "GET",
-    success: function(response) {
-        //alert('all clients: ' + response);
-        var string = "";
-        // this is executed when ajax call finished well
-        var jsonData = JSON.parse(response);
-        for (var i = 0; i < jsonData.beacons.length; i++) {
-            var client = jsonData.beacons[i];
-            allBeacons[client.id] = client;
-        }
-        //alert('all clients: ' + string);
-        console.log("going to set interval for all beacons " + jsonData.beacons.length);
-        for (var i in allBeacons) {
-            //console.log("set interval for " + i);
-            var signX = generateRandom(2);
-            var signY = generateRandom(2);
-            var offsetX = 0;
-            var offsetY = 0;
-            if (signX == 0) {
-                offsetX = generateRandom(10);
-            } else {
-                offsetX = generateRandom(10);
-            }
-            if (signY == 0) {
-                offsetY = valY - generateRandom(10);
-            } else {
-                offsetY = valY + generateRandom(10);
-            }
-            startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
-        }
-    },
-    error: function(xhr, status, error) {
-        // if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-        console.log("get beacons error");
-    }
-});
-
 //get all floors
 $.ajax({
     url: 'http://commandpushingtodevice.mybluemix.net/api/getData/floors?siteId=z1i30t4p',
@@ -162,6 +122,7 @@ $.ajax({
            
                             console.log("actual width " + actualWidth + " actual height " + actualHeight);
                             console.log("actual imgExactFitWidth " + imgExactFitWidth + " actual imgExactFitHeight " + imgExactFitHeight);
+                            getBeacons();
                             getSensors(floorSelect.options[floorSelect.selectedIndex].value);
                         }
                     });
@@ -175,6 +136,49 @@ $.ajax({
         console.log("floor loading error ");
     }
 });
+
+//get all beacons
+function getBeacons() {
+    $.ajax({
+        url: 'http://commandpushingtodevice.mybluemix.net/api/beacon/list',
+        type: "GET",
+        success: function (response) {
+            //alert('all clients: ' + response);
+            var string = "";
+            // this is executed when ajax call finished well
+            var jsonData = JSON.parse(response);
+            allBeacons = {};
+            for (var i = 0; i < jsonData.beacons.length; i++) {
+                var client = jsonData.beacons[i];
+                allBeacons[client.id] = client;
+            }
+            //alert('all clients: ' + string);
+            console.log("going to set interval for all beacons " + jsonData.beacons.length);
+            for (var i in allBeacons) {
+                //console.log("set interval for " + i);
+                var signX = generateRandom(2);
+                var signY = generateRandom(2);
+                var offsetX = 0;
+                var offsetY = 0;
+                if (signX == 0) {
+                    offsetX = generateRandom(10);
+                } else {
+                    offsetX = generateRandom(10);
+                }
+                if (signY == 0) {
+                    offsetY = valY - generateRandom(10);
+                } else {
+                    offsetY = valY + generateRandom(10);
+                }
+                startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
+            }
+        },
+        error: function (xhr, status, error) {
+            // if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
+            console.log("get beacons error");
+        }
+    });
+}
 
 //get all sensors
 function getSensors(floorid) {
@@ -243,7 +247,10 @@ var intervalId = setInterval(function() {
 }, 3000);
 */
 
-function startGetClientPos(client, duration , offsetX, offsetY) {
+function startGetClientPos(client, duration, offsetX, offsetY) {
+    if (allBeacons[client.id] == undefined) {
+        return;
+    }
     //call $.ajax here
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId=' + client.mac,
