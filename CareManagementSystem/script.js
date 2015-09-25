@@ -161,14 +161,14 @@ function getBeacons() {
                 var offsetX = 0;
                 var offsetY = 0;
                 if (signX == 0) {
-                    offsetX = Math.floor(Math.random() * -15) - 5;//-generateRandom(20);
+                    offsetX = Math.floor(Math.random() * -25) - 5;//-generateRandom(20);
                 } else {
-                    offsetX = Math.floor(Math.random() * 15) + 5;//generateRandom(20);
+                    offsetX = Math.floor(Math.random() * 25) + 5;//generateRandom(20);
                 }
                 if (signY == 0) {
-                    offsetY = Math.floor(Math.random() * -5) - 5;//-generateRandom(30);
+                    offsetY = Math.floor(Math.random() * -25) - 5;//-generateRandom(30);
                 } else {
-                    offsetY = Math.floor(Math.random() * 5) + 5;//generateRandom(30);
+                    offsetY = Math.floor(Math.random() * 25) + 5;//generateRandom(30);
                 }
 
                 /* Shang: to offset it by left half its width and higher by its height
@@ -179,7 +179,9 @@ function getBeacons() {
                             var widthRatio = imgWidth / actualWidth;
                             var heightRatio = imgHeight / actualHeight;*/
 
-                startGetClientPos(allBeacons[i], 4000, offsetX, offsetY);
+                getClientName(jsonData.beacons[mac]);
+
+                startGetClientPos(allBeacons[i], clientName, 4000, offsetX, offsetY);
             }
         },
         error: function (xhr, status, error) {
@@ -220,6 +222,24 @@ function getSensors(floorid) {
     });
 }
 
+//get all sensors
+function getClientName(mac) {
+    $.ajax({
+        url: 'http://commandpushingtodevice.mybluemix.net/api/userprofile/getBeaconByMAC?beaconMAC=' + mac,
+        type: "GET",
+        data: ({}),
+        success: function (response) {
+            console.log("Get client's name from mac: " + mac + "data " + response);
+            var jsonData1 = JSON.parse(response);
+            var clientName = jsonData1.ClientName;
+            console.log("client's name: " + clientName);
+        },
+        error: function (xhr, status, error) {
+            console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
+        }
+    });
+}
+
 /*
 var intervalId = setInterval(function() {
     //call $.ajax here
@@ -256,7 +276,7 @@ var intervalId = setInterval(function() {
 }, 3000);
 */
 
-function startGetClientPos(client, duration, offsetX, offsetY) {
+function startGetClientPos(client, clientName, duration, offsetX, offsetY) {
     if (allBeacons[client.id] == undefined) {
         return;
     }
@@ -278,16 +298,16 @@ function startGetClientPos(client, duration, offsetX, offsetY) {
             /*
 
             */
-            drawOldPeople(valX, valY, client.id, jsonData.dangerLevel);
+            drawOldPeople(valX, valY, clientName, jsonData.dangerLevel);
 
-            setTimeout(function () { startGetClientPos(client, duration, offsetX, offsetY) }, duration);
+            setTimeout(function () { startGetClientPos(client, clientName, duration, offsetX, offsetY) }, duration);
             //alert('all clients: ' + string);
         },
         error: function (xhr, status, error) {
             console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
             // executed if something went wrong during call
             //if (xhr.status > 0) alert('got error: ' + status); // status 0 - when load is interrupted
-            setTimeout(function () { startGetClientPos(client, duration, offsetX, offsetY) }, duration);
+            setTimeout(function () { startGetClientPos(client, clientName, duration, offsetX, offsetY) }, duration);
         }
     });
 };
