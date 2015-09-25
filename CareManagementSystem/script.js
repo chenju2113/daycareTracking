@@ -161,14 +161,14 @@ function getBeacons() {
                 var offsetX = 0;
                 var offsetY = 0;
                 if (signX == 0) {
-                    offsetX = -generateRandom(20);
+                    offsetX = Math.floor(Math.random() * -15) - 5;//-generateRandom(20);
                 } else {
-                    offsetX = generateRandom(20);
+                    offsetX = Math.floor(Math.random() * 15) + 5;//generateRandom(20);
                 }
                 if (signY == 0) {
-                    offsetY = -generateRandom(30);
+                    offsetY = Math.floor(Math.random() * -5) - 5;//-generateRandom(30);
                 } else {
-                    offsetY = generateRandom(30);
+                    offsetY = Math.floor(Math.random() * 5) + 5;//generateRandom(30);
                 }
 
                 /* Shang: to offset it by left half its width and higher by its height
@@ -273,8 +273,8 @@ function startGetClientPos(client, duration, offsetX, offsetY) {
             var jsonData = JSON.parse(response);
 
             // Shang: added another offset to get the UI aligned 
-            var valX = jsonData.x + offsetX + 82;
-            var valY = jsonData.y + offsetY + 163;
+            var valX = jsonData.x + offsetX - 82;
+            var valY = jsonData.y + offsetY - 163;
             /*
 
             */
