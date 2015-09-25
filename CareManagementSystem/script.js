@@ -179,6 +179,7 @@ function getBeacons() {
                             var widthRatio = imgWidth / actualWidth;
                             var heightRatio = imgHeight / actualHeight;*/
 
+                console.log("getClientName " + jsonData.beacons[mac]);
                 getClientName(jsonData.beacons[mac]);
 
                 startGetClientPos(allBeacons[i], clientName, 4000, offsetX, offsetY);
@@ -224,6 +225,7 @@ function getSensors(floorid) {
 
 //get all sensors
 function getClientName(mac) {
+    console.log("inside getClientName " + mac);
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/userprofile/getBeaconByMAC?beaconMAC=' + mac,
         type: "GET",
@@ -286,7 +288,7 @@ function startGetClientPos(client, clientName, duration, offsetX, offsetY) {
         type: "GET",
         data: ({}),
         success: function (response) {
-            console.log(" gotten client " + client.id + "data " + response);
+            console.log(" gotten client " + clientName + " - data " + response);
             //alert('all clients: ' + response);
             var string = "";
             // this is executed when ajax call finished well
@@ -295,9 +297,7 @@ function startGetClientPos(client, clientName, duration, offsetX, offsetY) {
             // Shang: added another offset to get the UI aligned 
             var valX = jsonData.x + offsetX - 82;
             var valY = jsonData.y + offsetY - 163;
-            /*
-
-            */
+            
             drawOldPeople(valX, valY, clientName, jsonData.dangerLevel);
 
             setTimeout(function () { startGetClientPos(client, clientName, duration, offsetX, offsetY) }, duration);
