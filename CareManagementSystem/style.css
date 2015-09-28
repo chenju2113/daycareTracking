@@ -107,9 +107,9 @@ body {
 
 .popupText{
 	text-align:center;
+    padding-top:25px;
 	padding-left:10px;
 	padding-right:10px;
-	line-height: 90px;
 }
 
 .peopleIconOverlay {

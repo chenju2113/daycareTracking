@@ -7,6 +7,11 @@ var NEAR_DOOR_ZONE = 2;
 var DANGER_ZONE_FAR_FROM_DOOR = 4;
 var DANGER_ZONE_FAR_FROM_DONGLES = 8;
 
+var mapApIconOffsetX = -30;
+var mapApIconOffsetY = -60;
+var mapClientIconOffsetX = -20;
+var mapClientIconOffsetY = -40;
+
 var array = [];
 
 var first = [];
@@ -148,41 +153,27 @@ function getBeacons() {
             // this is executed when ajax call finished well
             var jsonData = JSON.parse(response);
             allBeacons = {};
+            console.log("going to retrieve names for all beacons " + jsonData.beacons.length);
             for (var i = 0; i < jsonData.beacons.length; i++) {
                 var client = jsonData.beacons[i];
                 allBeacons[client.id] = client;
+
+                console.log("geting Client Name with mac" + allBeacons[client.id].mac);
+                var clientName = getClientName(client, allBeacons[client.id].mac);
+
+                //startGetClientPos(allBeacons[i], clientName, 4000, offsetX, offsetY);
             }
             //alert('all clients: ' + string);
-            console.log("going to set interval for all beacons " + jsonData.beacons.length);
+    
             for (var i in allBeacons) {
                 //console.log("set interval for " + i);
-                var signX = generateRandom(2);
-                var signY = generateRandom(2);
-                var offsetX = 0;
-                var offsetY = 0;
-                if (signX == 0) {
-                    offsetX = Math.floor(Math.random() * -25) - 5;//-generateRandom(20);
-                } else {
-                    offsetX = Math.floor(Math.random() * 25) + 5;//generateRandom(20);
-                }
-                if (signY == 0) {
-                    offsetY = Math.floor(Math.random() * -25) - 5;//-generateRandom(30);
-                } else {
-                    offsetY = Math.floor(Math.random() * 25) + 5;//generateRandom(30);
-                }
-
                 /* Shang: to offset it by left half its width and higher by its height
                 actualWidth = allFloors[floorSelect.options[floorSelect.selectedIndex].value].width;
                             actualHeight = allFloors[floorSelect.options[floorSelect.selectedIndex].value].height;
                             imgExactFitWidth = Math.min(actualWidth, imgWidth);
                             imgExactFitHeight = Math.min(actualHeight, imgHeight);
                             var widthRatio = imgWidth / actualWidth;
-                            var heightRatio = imgHeight / actualHeight;*/
-
-                console.log("getClientName " + jsonData.beacons[mac]);
-                getClientName(jsonData.beacons[mac]);
-
-                startGetClientPos(allBeacons[i], clientName, 4000, offsetX, offsetY);
+                            var heightRatio = imgHeight / actualHeight; */
             }
         },
         error: function (xhr, status, error) {
@@ -224,7 +215,7 @@ function getSensors(floorid) {
 }
 
 //get all sensors
-function getClientName(mac) {
+function getClientName(client, mac) {
     console.log("inside getClientName " + mac);
     $.ajax({
         url: 'http://commandpushingtodevice.mybluemix.net/api/userprofile/getBeaconByMAC?beaconMAC=' + mac,
@@ -235,6 +226,23 @@ function getClientName(mac) {
             var jsonData1 = JSON.parse(response);
             var clientName = jsonData1.ClientName;
             console.log("client's name: " + clientName);
+
+            var signX = generateRandom(2);
+            var signY = generateRandom(2);
+            var offsetX = 0;
+            var offsetY = 0;
+            if (signX == 0) {
+                offsetX = Math.floor(Math.random() * -25) - 5;//-generateRandom(20);
+            } else {
+                offsetX = Math.floor(Math.random() * 25) + 5;//generateRandom(20);
+            }
+            if (signY == 0) {
+                offsetY = Math.floor(Math.random() * -25) - 5;//-generateRandom(30);
+            } else {
+                offsetY = Math.floor(Math.random() * 25) + 5;//generateRandom(30);
+            }
+            console.log("start geting client pos " + clientName);
+            startGetClientPos(client, clientName, 4000, offsetX, offsetY);
         },
         error: function (xhr, status, error) {
             console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
@@ -295,8 +303,8 @@ function startGetClientPos(client, clientName, duration, offsetX, offsetY) {
             var jsonData = JSON.parse(response);
 
             // Shang: added another offset to get the UI aligned 
-            var valX = jsonData.x + offsetX - 82;
-            var valY = jsonData.y + offsetY - 163;
+            var valX = jsonData.x + offsetX;
+            var valY = jsonData.y + offsetY;
             
             drawOldPeople(valX, valY, clientName, jsonData.dangerLevel);
 
@@ -316,6 +324,9 @@ function drawAPs(x, y, name) {
     x = findRelativePixels(x, actualWidth, imgExactFitWidth);
     y = findRelativePixels(y, actualHeight, imgExactFitHeight);
     y = imgExactFitHeight - y;
+
+    x += mapApIconOffsetX;
+    y += mapApIconOffsetY;
     /*
     var image = new Image();
 
@@ -359,6 +370,10 @@ function drawOldPeople(x, y, name, dangerLvl, zone) {
     x = findRelativePixels(x, actualWidth, imgExactFitWidth);
     y = findRelativePixels(y, actualHeight, imgExactFitHeight);
     y = imgExactFitHeight - y;
+
+    x += mapClientIconOffsetX;
+    y += mapClientIconOffsetY;
+
     /*
     if(zone & SAFE_ZONE || zone & NEAR_DOOR_ZONE){
         console.log(name + " zone is in safe or near");
@@ -381,7 +396,13 @@ function drawOldPeople(x, y, name, dangerLvl, zone) {
     else if (dangerLvl == 3) {
         // danger
         color = "#FF0000";
-        y += 50;
+        y += 120;
+    }
+        //no data
+    else {
+        color = "#7B7B7B";
+        y = imgHeight;
+        x = imgWidth;
     }
 
     //console.log("after relative pixel for drawing drawOldPeople x " + x + " y " + y);
