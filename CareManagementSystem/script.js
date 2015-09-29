@@ -1,3 +1,7 @@
+var hostnameProduction = "http://commandpushingtodevice.mybluemix.net";
+var hostnameDevelopment = "http://commandpushingtodevicedev.mybluemix.net";
+var hostname = hostnameDevelopment;
+
 var canvas = document.getElementById('mycanvas');
 var ctx = canvas.getContext("2d");
 var floorSelect = document.getElementById("floor_select");
@@ -39,7 +43,7 @@ drawAPs(800, 350, "3");
 
 //get all floors
 $.ajax({
-    url: 'http://commandpushingtodevice.mybluemix.net/api/getData/floors?siteId=z1i30t4p',
+    url: hostname+'/api/getData/floors?siteId=z1i30t4p',
     type: "GET",
     success: function (response) {
         //alert('all clients: ' + response);
@@ -145,7 +149,7 @@ $.ajax({
 //get all beacons
 function getBeacons() {
     $.ajax({
-        url: 'http://commandpushingtodevice.mybluemix.net/api/beacon/list',
+        url: hostname + '/api/beacon/list',
         type: "GET",
         success: function (response) {
             //alert('all clients: ' + response);
@@ -186,7 +190,7 @@ function getBeacons() {
 //get all sensors
 function getSensors(floorid) {
     $.ajax({
-        url: 'http://commandpushingtodevice.mybluemix.net/api/sensor/list?siteId=z1i30t4p&floorId=' + floorid,
+        url: hostname + '/api/sensor/list?siteId=z1i30t4p&floorId=' + floorid,
         type: "GET",
         success: function (response) {
             //alert('all clients: ' + response);
@@ -218,7 +222,7 @@ function getSensors(floorid) {
 function getClientName(client, mac) {
     console.log("inside getClientName " + mac);
     $.ajax({
-        url: 'http://commandpushingtodevice.mybluemix.net/api/userprofile/getBeaconByMAC?beaconMAC=' + mac,
+        url: hostname + '/api/userprofile/getBeaconByMAC?beaconMAC=' + mac,
         type: "GET",
         data: ({}),
         success: function (response) {
@@ -287,12 +291,13 @@ var intervalId = setInterval(function() {
 */
 
 function startGetClientPos(client, clientName, duration, offsetX, offsetY) {
-    if (allBeacons[client.id] == undefined) {
+    if (client == undefined) {
         return;
     }
+    console.log(" startGetClientPos " + hostname + '/api/position/full?siteId=z1i30t4p&floorId=' + floorSelect.options[floorSelect.selectedIndex].value + '&beaconId=' + client.mac);
     //call $.ajax here
     $.ajax({
-        url: 'http://commandpushingtodevice.mybluemix.net/api/position/full?siteId=z1i30t4p&floorId=7cim0o6e&beaconId=' + client.mac,
+        url: hostname + '/api/position/full?siteId=z1i30t4p&floorId=' + floorSelect.options[floorSelect.selectedIndex].value + '&beaconId=' + client.mac,
         type: "GET",
         data: ({}),
         success: function (response) {
