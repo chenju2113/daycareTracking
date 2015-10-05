@@ -1,6 +1,6 @@
 var hostnameProduction = "http://commandpushingtodevice.mybluemix.net";
 var hostnameDevelopment = "http://commandpushingtodevicedev.mybluemix.net";
-var hostname = hostnameDevelopment;
+var hostname = hostnameProduction;
 
 var canvas = document.getElementById('mycanvas');
 var ctx = canvas.getContext("2d");
@@ -162,8 +162,8 @@ function getBeacons() {
                 var client = jsonData.beacons[i];
                 allBeacons[client.id] = client;
 
-                console.log("geting Client Name with mac" + allBeacons[client.id].mac);
-                var clientName = getClientName(client, allBeacons[client.id].mac);
+                console.log("geting Client Name with mac" + allBeacons[client.id].id);
+                var clientName = getClientName(client, allBeacons[client.id].id);
 
                 //startGetClientPos(allBeacons[i], clientName, 4000, offsetX, offsetY);
             }
@@ -219,34 +219,37 @@ function getSensors(floorid) {
 }
 
 //get all sensors
-function getClientName(client, mac) {
-    console.log("inside getClientName " + mac);
+function getClientName(client, beaconId) {
+    console.log("inside getClientName " + beaconId);
     $.ajax({
-        url: hostname + '/api/userprofile/getBeaconByMAC?beaconMAC=' + mac,
+        url: hostname + '/api/userprofile/getBeaconByBeaconId?beaconId=' + beaconId,
         type: "GET",
         data: ({}),
         success: function (response) {
-            console.log("Get client's name from mac: " + mac + "data " + response);
+            console.log("Get client's name from beaconId: " + beaconId + "data " + response);
             var jsonData1 = JSON.parse(response);
-            var clientName = jsonData1.ClientName;
-            console.log("client's name: " + clientName);
-
-            var signX = generateRandom(2);
-            var signY = generateRandom(2);
-            var offsetX = 0;
-            var offsetY = 0;
-            if (signX == 0) {
-                offsetX = Math.floor(Math.random() * -25) - 5;//-generateRandom(20);
+            if (jsonData1.status == 1) {
+                var clientName = jsonData1.ClientName;
+                console.log("client's name: " + clientName);
+                var signX = generateRandom(2);
+                var signY = generateRandom(2);
+                var offsetX = 0;
+                var offsetY = 0;
+                if (signX == 0) {
+                    offsetX = Math.floor(Math.random() * -25) - 5;//-generateRandom(20);
+                } else {
+                    offsetX = Math.floor(Math.random() * 25) + 5;//generateRandom(20);
+                }
+                if (signY == 0) {
+                    offsetY = Math.floor(Math.random() * -25) - 5;//-generateRandom(30);
+                } else {
+                    offsetY = Math.floor(Math.random() * 25) + 5;//generateRandom(30);
+                }
+                console.log("start geting client pos " + clientName);
+                startGetClientPos(client, clientName, 4000, offsetX, offsetY);
             } else {
-                offsetX = Math.floor(Math.random() * 25) + 5;//generateRandom(20);
+                console.log("no such client with beaconId "+ beaconId);
             }
-            if (signY == 0) {
-                offsetY = Math.floor(Math.random() * -25) - 5;//-generateRandom(30);
-            } else {
-                offsetY = Math.floor(Math.random() * 25) + 5;//generateRandom(30);
-            }
-            console.log("start geting client pos " + clientName);
-            startGetClientPos(client, clientName, 4000, offsetX, offsetY);
         },
         error: function (xhr, status, error) {
             console.log('get client pos ' + client.name + 'error: ' + error + " status " + status);
