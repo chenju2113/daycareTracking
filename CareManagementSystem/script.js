@@ -6,10 +6,13 @@ var canvas = document.getElementById('mycanvas');
 var ctx = canvas.getContext("2d");
 var floorSelect = document.getElementById("floor_select");
 
-var SAFE_ZONE = 1;
-var NEAR_DOOR_ZONE = 2;
-var DANGER_ZONE_FAR_FROM_DOOR = 4;
-var DANGER_ZONE_FAR_FROM_DONGLES = 8;
+var SAFE_ZONE = 1 << 0;
+var NEAR_DOOR_ZONE = 1 << 1;
+var DANGER_ZONE_FAR_FROM_DOOR = 1 << 2;
+var DANGER_ZONE_FAR_FROM_DONGLES = 1 << 3;
+var TOILET_ZONE = 1 << 4;
+var NEAR_DOOR_SAFE_ZONE = 1 << 5;
+var DONGLE_EDGE_ZONE = 1 << 6;
 
 var mapApIconOffsetX = -30;
 var mapApIconOffsetY = -60;
@@ -396,6 +399,10 @@ function drawOldPeople(x, y, name, dangerLvl, zone) {
     if (dangerLvl == 1) {
         // safe
         color = "#00FF00";
+        if ((zone & NEAR_DOOR_ZONE) != 0 || (zone & NEAR_DOOR_SAFE_ZONE) != 0) {
+            console.log("zone is near door");
+            y -= 60;
+        }
     }
     else if (dangerLvl == 2) {
         // warning
